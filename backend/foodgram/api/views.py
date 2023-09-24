@@ -26,6 +26,7 @@ from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 
 User = get_user_model()
 
+
 class RecipesViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filter_backends = [DjangoFilterBackend]
@@ -68,7 +69,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         error_message = f'Рецепт не добавлен в {model.__name__}'
         return Response({'errors': error_message},
-        		status=status.HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['post', 'delete'], detail=True,
             permission_classes=[IsAuthenticated])
@@ -93,13 +94,14 @@ class RecipesViewSet(viewsets.ModelViewSet):
         ).annotate(amount=Sum('recipe__ingredients_amount__amount'))
         shopping_list = 'Список покупок:\n'
         count_ingredients = 0
+        unit = ingr["recipe__ingredients_amount__ingredient"]["measurement_unit"]
         for ingr in ingredients:
             count_ingredients += 1
             shopping_list += (
                 f'{count_ingredients}) '
                 f'{ingr["recipe__ingredients_amount__ingredient__name"]} - '
                 f'{ingr["amount"]} '
-                f'({ingr["recipe__ingredients_amount__ingredient__measurement_unit"]})\n'
+                f'({unit})\n'
             )
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = (
