@@ -48,7 +48,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
         if self.request.GET.get('is_in_shopping_cart'):
             cart_recipes_ids = ShoppingCart.objects \
-            	.filter(user=author).values('recipe_id')
+                .filter(user=author).values('recipe_id')
             return queryset.filter(pk__in=cart_recipes_ids)
         return queryset
 
@@ -71,21 +71,21 @@ class RecipesViewSet(viewsets.ModelViewSet):
         		status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['post', 'delete'], detail=True,
-    	    permission_classes=[IsAuthenticated])
+            permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
         if request.method == 'POST':
             return self.add_in_list(Favorite, request.user, pk)
         return self.delete_in_list(Favorite, request.user, pk)
 
     @action(methods=['post', 'delete'], detail=True,
-    	    permission_classes=[IsAuthenticated])
+            permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk=None):
         if request.method == 'POST':
             return self.add_in_list(ShoppingCart, request.user, pk)
         return self.delete_in_list(ShoppingCart, request.user, pk)
 
     @action(methods=['GET'], detail=False,
-    	    permission_classes=[IsAuthenticated])
+            permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
         ingredients = request.user.shopping_cart.values(
             'recipe__ingredients_amount__ingredient__name',
@@ -132,10 +132,10 @@ class FollowUserView(APIView):
         if request.user.follower.filter(author=author).exists():
             error_message = "Вы уже подписаны на автора"
             return Response({"errors": error_message},
-            		    status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_400_BAD_REQUEST)
         follow_instance = request.user.follower.create(author=author)
         serializer = FollowSerializer(follow_instance,
-        			      context={"request": request})
+                                      context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, id):
@@ -145,7 +145,7 @@ class FollowUserView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         error_message = "Автор отсутствует в списке подписок"
         return Response({"errors": error_message},
-        		status=status.HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscriptionsView(ListAPIView):
