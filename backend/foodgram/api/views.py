@@ -53,7 +53,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     def add_in_list(self, model, user, pk):
         if model.objects.filter(user=user, recipe__id=pk).exists():
-            return Response({'errors': f'Рецепт уже добавлен в {model.__name__}'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': f'Рецепт уже добавлен в {model.__name__}'},
+            		    status=status.HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, pk=pk)
         model.objects.create(user=user, recipe=recipe)
         serializer = RecipeListSerializer(recipe)
@@ -64,7 +65,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
         if obj.exists():
             obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response({'errors': f'Рецепт не добавлен в {model.__name__}'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'errors': f'Рецепт не добавлен в {model.__name__}'},
+                        status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['post', 'delete'], detail=True, permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
