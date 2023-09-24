@@ -103,8 +103,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 f'{count_ingredients}) '
                 f'{ingr["recipe__ingredients_amount__ingredient__name"]} - '
                 f'{ingr["amount"]} '
-                f'({ingr["recipe__ingredients_amount' \
-                 '__ingredient__measurement_unit"]})\n'
+                f'({ingr["recipe__ingredients_amount__ingredient__measurement_unit"]})\n'
             )
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = (
