@@ -55,7 +55,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     def add_in_list(self, model, user, pk):
         if model.objects.filter(user=user, recipe__id=pk).exists():
-            response_data = {'errors': f'Рецепт уже добавлен в {model.__name__}'}
+            error = f'Рецепт уже добавлен в {model.__name__}'
+            response_data = {'errors': error}
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, pk=pk)
         model.objects.create(user=user, recipe=recipe)
