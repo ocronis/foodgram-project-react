@@ -137,30 +137,26 @@ class RecipesWriteSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, value):
         if not value:
-            raise serializers.ValidationError(
-                 "Выберите хотя бы один ингредиент."
-            )
-        
+            raise serializers.ValidationError("Выберите хотя "
+                                              "бы один ингредиент.")
+
         ingredient_ids = [item['id'] for item in value]
         if len(set(ingredient_ids)) != len(ingredient_ids):
-            raise serializers.ValidationError(
-                 "Ингредиенты должны быть уникальными."
-            )
-        
+            raise serializers.ValidationError("Ингредиенты должны "
+                                              "быть уникальными.")
+
         return value
 
     def validate_cooking_time(self, value):
         if value <= 0:
-            raise serializers.ValidationError(
-                 "Время приготовления должно быть больше нуля."
-            )
+            raise serializers.ValidationError("Время приготовления "
+                                              "должно быть больше нуля.")
         return value
 
     def validate_name(self, value):
         if not any(char.isalpha() for char in value):
-            raise serializers.ValidationError(
-                 "Название рецепта должно содержать буквы."
-            )
+            raise serializers.ValidationError("Название рецепта "
+                                              "должно содержать буквы.")
         return value
 
     def create(self, validated_data):

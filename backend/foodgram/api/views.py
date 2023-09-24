@@ -23,6 +23,7 @@ from .utils import (
     download_shopping_cart,
 )
 
+
 class RecipesViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filter_backends = [DjangoFilterBackend]
@@ -63,10 +64,12 @@ class RecipesViewSet(viewsets.ModelViewSet):
         )
         return response
 
+
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = get_tags_queryset()
     serializer_class = TagsSerializer
     pagination_class = None
+
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = get_ingredients_queryset()
@@ -76,6 +79,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['^name']
     pagination_class = None
 
+
 class FollowUserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -84,6 +88,7 @@ class FollowUserView(APIView):
 
     def delete(self, request, id):
         return unfollow_user(request, id)
+
 
 class SubscriptionsView(ListAPIView):
     serializer_class = FollowSerializer
