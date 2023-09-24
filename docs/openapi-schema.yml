@@ -1,27 +1,28 @@
 openapi: 3.0.2
 info:
-  title: 'Foodgram'
-  version: ''
+  title: Foodgram
+  version: 1.0
 paths:
   /api/users/:
     get:
       operationId: Список пользователей
-      description: ''
+      summary: Получить список пользователей
       parameters:
         - name: page
-          required: false
           in: query
           description: Номер страницы.
+          required: false
           schema:
             type: integer
         - name: limit
-          required: false
           in: query
           description: Количество объектов на странице.
+          required: false
           schema:
             type: integer
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
@@ -30,81 +31,81 @@ paths:
                   count:
                     type: integer
                     example: 123
-                    description: 'Общее количество объектов в базе'
+                    description: Общее количество объектов в базе
                   next:
                     type: string
                     nullable: true
                     format: uri
                     example: http://foodgram.example.org/api/users/?page=4
-                    description: 'Ссылка на следующую страницу'
+                    description: Ссылка на следующую страницу
                   previous:
                     type: string
                     nullable: true
                     format: uri
                     example: http://foodgram.example.org/api/users/?page=2
-                    description: 'Ссылка на предыдущую страницу'
+                    description: Ссылка на предыдущую страницу
                   results:
                     type: array
                     items:
                       $ref: '#/components/schemas/User'
-                    description: 'Список объектов текущей страницы'
-          description: ''
+                    description: Список объектов текущей страницы
       tags:
         - Пользователи
+
     post:
       operationId: Регистрация пользователя
-      description: ''
-      parameters: []
+      summary: Зарегистрировать нового пользователя
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CustomUserCreate'
       responses:
         '201':
+          description: Пользователь успешно создан
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomUserResponseOnCreate'
-          description: 'Пользователь успешно создан'
         '400':
           $ref: '#/components/responses/ValidationError'
       tags:
         - Пользователи
   /api/tags/:
     get:
-      operationId: Cписок тегов
-      description: ''
+      operationId: Список тегов
+      summary: Получить список тегов
       parameters: []
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Tag'
-          description: ''
       tags:
         - Теги
   /api/tags/{id}/:
     get:
       operationId: Получение тега
-      description: ''
+      summary: Получить информацию о теге
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого Тега."
+          description: Уникальный идентификатор тега.
           schema:
             type: string
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tag'
-          description: ''
         '404':
           $ref: '#/components/responses/NotFound'
       tags:
@@ -112,52 +113,55 @@ paths:
   /api/recipes/:
     get:
       operationId: Список рецептов
-      description: Страница доступна всем пользователям. Доступна фильтрация по избранному, автору, списку покупок и тегам.
+      summary: Получить список рецептов
+      description: |
+        Страница доступна всем пользователям. Доступна фильтрация по избранному, автору, списку покупок и тегам.
       parameters:
         - name: page
-          required: false
           in: query
           description: Номер страницы.
+          required: false
           schema:
             type: integer
         - name: limit
-          required: false
           in: query
           description: Количество объектов на странице.
+          required: false
           schema:
             type: integer
         - name: is_favorited
-          required: false
           in: query
           description: Показывать только рецепты, находящиеся в списке избранного.
+          required: false
           schema:
             type: integer
             enum: [0, 1]
         - name: is_in_shopping_cart
-          required: false
           in: query
           description: Показывать только рецепты, находящиеся в списке покупок.
+          required: false
           schema:
             type: integer
             enum: [0, 1]
         - name: author
-          required: false
           in: query
           description: Показывать рецепты только автора с указанным id.
+          required: false
           schema:
             type: integer
         - name: tags
-          required: false
           in: query
-          description: Показывать рецепты только с указанными тегами (по slug)
-          example: 'lunch&tags=breakfast'
-
+          description: |
+            Показывать рецепты только с указанными тегами (по slug).
+            Пример: 'lunch&tags=breakfast'
+          required: false
           schema:
             type: array
             items:
               type: string
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
@@ -166,47 +170,51 @@ paths:
                   count:
                     type: integer
                     example: 123
-                    description: 'Общее количество объектов в базе'
+                    description: Общее количество объектов в базе
                   next:
                     type: string
                     nullable: true
                     format: uri
                     example: http://foodgram.example.org/api/recipes/?page=4
-                    description: 'Ссылка на следующую страницу'
+                    description: Ссылка на следующую страницу
                   previous:
                     type: string
                     nullable: true
                     format: uri
                     example: http://foodgram.example.org/api/recipes/?page=2
-                    description: 'Ссылка на предыдущую страницу'
+                    description: Ссылка на предыдущую страницу
                   results:
                     type: array
                     items:
                       $ref: '#/components/schemas/RecipeList'
-                    description: 'Список объектов текущей страницы'
-          description: ''
+                    description: Список объектов текущей страницы
+        '404':
+          $ref: '#/components/responses/NotFound'
       tags:
         - Рецепты
+
     post:
       security:
         - Token: []
       operationId: Создание рецепта
-      description: 'Доступно только авторизованному пользователю'
+      summary: Создать новый рецепт
+      description: Доступно только авторизованному пользователю
       parameters: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RecipeCreateUpdate'
       responses:
         '201':
+          description: Рецепт успешно создан
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecipeList'
-          description: 'Рецепт успешно создан'
         '400':
-          description: 'Ошибки валидации в стандартном формате DRF'
+          description: Ошибки валидации в стандартном формате DRF
           content:
             application/json:
               schema:
@@ -220,13 +228,16 @@ paths:
   /api/recipes/download_shopping_cart/:
     get:
       security:
-        - Token: [ ]
+        - Token: []
       operationId: Скачать список покупок
-      description: 'Скачать файл со списком покупок. Это может быть TXT/PDF/CSV. Важно, чтобы контент файла удовлетворял требованиям задания. Доступно только авторизованным пользователям.'
+      summary: Скачать файл со списком покупок
+      description: |
+        Скачать файл со списком покупок. Это может быть TXT/PDF/CSV.
+        Важно, чтобы контент файла удовлетворял требованиям задания. Доступно только авторизованным пользователям.
       parameters: []
       responses:
         '200':
-          description: ''
+          description: Успешный запрос
           content:
             application/pdf:
               schema:
@@ -243,47 +254,48 @@ paths:
   /api/recipes/{id}/:
     get:
       operationId: Получение рецепта
-      description: ''
+      summary: Получить информацию о рецепте
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого рецепта"
+          description: Уникальный идентификатор рецепта.
           schema:
             type: string
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecipeList'
-          description: ''
-      tags:
-        - Рецепты
+
     patch:
       operationId: Обновление рецепта
       security:
-        - Token: [ ]
+        - Token: []
+      summary: Обновить рецепт
       description: 'Доступно только автору данного рецепта'
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого рецепта."
+          description: Уникальный идентификатор рецепта.
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RecipeCreateUpdate'
       responses:
         '200':
+          description: Рецепт успешно обновлен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecipeList'
-          description: 'Рецепт успешно обновлен'
         '400':
           $ref: '#/components/responses/NestedValidationError'
         '401':
@@ -292,80 +304,79 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
-      tags:
-        - Рецепты
+
     delete:
       operationId: Удаление рецепта
-
+      summary: Удалить рецепт
       description: 'Доступно только автору данного рецепта'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого рецепта"
+          description: Уникальный идентификатор рецепта.
           schema:
             type: string
       responses:
         '204':
-          description: 'Рецепт успешно удален'
+          description: Рецепт успешно удален
         '401':
           $ref: '#/components/responses/AuthenticationError'
         '403':
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
-      tags:
-        - Рецепты
   /api/recipes/{id}/favorite/:
     post:
       operationId: Добавить рецепт в избранное
+      summary: Добавить рецепт в избранное
       description: 'Доступно только авторизованному пользователю.'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого рецепта"
+          description: Уникальный идентификатор рецепта.
           schema:
             type: string
       responses:
         '201':
+          description: Рецепт успешно добавлен в избранное
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecipeMinified'
-          description: 'Рецепт успешно добавлен в избранное'
         '400':
-          description: 'Ошибка добавления в избранное (Например, когда рецепт уже есть в избранном)'
+          description: Ошибка добавления в избранное (Например, когда рецепт уже есть в избранном)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SelfMadeError'
         '401':
           $ref: '#/components/responses/AuthenticationError'
-
       tags:
         - Избранное
+
     delete:
       operationId: Удалить рецепт из избранного
-      description: 'Доступно только авторизованным пользователям'
+      summary: Удалить рецепт из избранного
+      description: 'Доступно только авторизованным пользователям.'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого рецепта."
+          description: Уникальный идентификатор рецепта.
           schema:
             type: string
       responses:
         '204':
-          description: 'Рецепт успешно удален из избранного'
+          description: Рецепт успешно удален из избранного
         '400':
-          description: 'Ошибка удаления из избранного (Например, когда рецепта там не было)'
+          description: Ошибка удаления из избранного (Например, когда рецепта там не было)
           content:
             application/json:
               schema:
@@ -377,25 +388,26 @@ paths:
   /api/recipes/{id}/shopping_cart/:
     post:
       operationId: Добавить рецепт в список покупок
-      description: 'Доступно только авторизованным пользователям'
+      summary: Добавить рецепт в список покупок
+      description: 'Доступно только авторизованным пользователям.'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого рецепта."
+          description: Уникальный идентификатор рецепта.
           schema:
             type: string
       responses:
         '201':
+          description: Рецепт успешно добавлен в список покупок
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecipeMinified'
-          description: 'Рецепт успешно добавлен в список покупок'
         '400':
-          description: 'Ошибка добавления в список покупок (Например, когда рецепт уже есть в списке покупок)'
+          description: Ошибка добавления в список покупок (Например, когда рецепт уже есть в списке покупок)
           content:
             application/json:
               schema:
@@ -404,23 +416,25 @@ paths:
           $ref: '#/components/responses/AuthenticationError'
       tags:
         - Список покупок
+
     delete:
       operationId: Удалить рецепт из списка покупок
-      description: 'Доступно только авторизованным пользователям'
+      summary: Удалить рецепт из списка покупок
+      description: 'Доступно только авторизованным пользователям.'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого рецепта."
+          description: Уникальный идентификатор рецепта.
           schema:
             type: string
       responses:
         '204':
-          description: 'Рецепт успешно удален из списка покупок'
+          description: Рецепт успешно удален из списка покупок
         '400':
-          description: 'Ошибка удаления из списка покупок (Например, когда рецепта там не было)'
+          description: Ошибка удаления из списка покупок (Например, когда рецепта там не было)
           content:
             application/json:
               schema:
@@ -432,23 +446,24 @@ paths:
   /api/users/{id}/:
     get:
       operationId: Профиль пользователя
+      summary: Получить профиль пользователя
       description: 'Доступно всем пользователям.'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный id этого пользователя"
+          description: Уникальный идентификатор пользователя.
           schema:
             type: string
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-          description: ''
         '404':
           $ref: '#/components/responses/NotFound'
         '401':
@@ -458,17 +473,18 @@ paths:
   /api/users/me/:
     get:
       operationId: Текущий пользователь
+      summary: Получить информацию о текущем пользователе
       description: ''
       parameters: []
       security:
-        - Token: [ ]
+        - Token: []
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-          description: ''
         '401':
           $ref: '#/components/responses/AuthenticationError'
       tags:
@@ -476,6 +492,7 @@ paths:
   /api/users/subscriptions/:
     get:
       operationId: Мои подписки
+      summary: Получить список подписок
       description: 'Возвращает пользователей, на которых подписан текущий пользователь. В выдачу добавляются рецепты.'
       parameters:
         - name: page
@@ -498,6 +515,7 @@ paths:
             type: integer
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
@@ -524,7 +542,6 @@ paths:
                     items:
                       $ref: '#/components/schemas/UserWithRecipes'
                     description: 'Список объектов текущей страницы'
-          description: ''
         '401':
           $ref: '#/components/responses/AuthenticationError'
       tags:
@@ -532,14 +549,15 @@ paths:
   /api/users/{id}/subscribe/:
     post:
       operationId: Подписаться на пользователя
-      description: 'Доступно только авторизованным пользователям'
+      summary: Подписаться на пользователя
+      description: 'Доступно только авторизованным пользователям.'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого пользователя."
+          description: Уникальный идентификатор пользователя.
           schema:
             type: string
         - name: recipes_limit
@@ -550,13 +568,13 @@ paths:
             type: integer
       responses:
         '201':
+          description: Подписка успешно создана
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserWithRecipes'
-          description: 'Подписка успешно создана'
         '400':
-          description: 'Ошибка подписки (Например, если уже подписан или при подписке на себя самого)'
+          description: Ошибка подписки (Например, если уже подписан или при подписке на себя самого)
           content:
             application/json:
               schema:
@@ -567,23 +585,25 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - Подписки
+
     delete:
       operationId: Отписаться от пользователя
-      description: 'Доступно только авторизованным пользователям'
+      summary: Отписаться от пользователя
+      description: 'Доступно только авторизованным пользователям.'
       security:
-        - Token: [ ]
+        - Token: []
       parameters:
         - name: id
           in: path
           required: true
-          description: "Уникальный идентификатор этого пользователя."
+          description: Уникальный идентификатор пользователя.
           schema:
             type: string
       responses:
         '204':
-          description: 'Успешная отписка'
+          description: Успешная отписка
         '400':
-          description: 'Ошибка отписки (Например, если не был подписан)'
+          description: Ошибка отписки (Например, если не был подписан)
           content:
             application/json:
               schema:
@@ -592,12 +612,12 @@ paths:
           $ref: '#/components/responses/AuthenticationError'
         '404':
           $ref: '#/components/responses/NotFound'
-
       tags:
         - Подписки
   /api/ingredients/:
     get:
       operationId: Список ингредиентов
+      summary: Получить список ингредиентов
       description: 'Список ингредиентов с возможностью поиска по имени.'
       parameters:
         - name: name
@@ -608,38 +628,40 @@ paths:
             type: string
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Ingredient'
-          description: ''
       tags:
         - Ингредиенты
   /api/ingredients/{id}/:
     get:
       operationId: Получение ингредиента
+      summary: Получить информацию об ингредиенте
       description: 'Уникальный идентификатор этого ингредиента.'
       parameters:
         - name: id
           in: path
           required: true
-          description: ''
+          description: Уникальный идентификатор ингредиента.
           schema:
             type: integer
       responses:
         '200':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ingredient'
-          description: ''
       tags:
         - Ингредиенты
   /api/users/set_password/:
     post:
       operationId: Изменение пароля
+      summary: Изменить пароль
       description: 'Изменение пароля текущего пользователя'
       parameters: []
       requestBody:
@@ -649,7 +671,7 @@ paths:
               $ref: '#/components/schemas/SetPassword'
       responses:
         '204':
-          description: 'Пароль успешно изменен'
+          description: Пароль успешно изменен
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -659,6 +681,7 @@ paths:
   /api/auth/token/login/:
     post:
       operationId: Получить токен авторизации
+      summary: Получить токен авторизации
       description: Используется для авторизации по емейлу и паролю, чтобы далее использовать токен при запросах.
       parameters: []
       requestBody:
@@ -668,29 +691,29 @@ paths:
               $ref: '#/components/schemas/TokenCreate'
       responses:
         '201':
+          description: Успешный запрос
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenGetResponse'
-          description: ''
       tags:
         - Пользователи
   /api/auth/token/logout/:
     post:
       operationId: Удаление токена
+      summary: Удалить токен
       description: Удаляет токен текущего пользователя
       parameters: []
       requestBody:
         content:
           application/json:
             schema: {}
-
       responses:
         '204':
+          description: Успешный запрос
           content:
             application/json:
               schema: {}
-          description: ''
         '401':
           $ref: '#/components/responses/AuthenticationError'
       tags:
@@ -698,77 +721,78 @@ paths:
 components:
   schemas:
     User:
-      description:  'Пользователь (В рецепте - автор рецепта)'
+      description: Пользователь (в рецепте - автор рецепта)
       type: object
       properties:
         email:
           type: string
           format: email
           maxLength: 254
-          description: "Адрес электронной почты"
+          description: Адрес электронной почты
         id:
           type: integer
           readOnly: true
         username:
           type: string
-          description: "Уникальный юзернейм"
+          description: Уникальный юзернейм
           pattern: ^[\w.@+-]+\z
           maxLength: 150
         first_name:
           type: string
           maxLength: 150
-          description: "Имя"
-          example: "Вася"
+          description: Имя
+          example: Вася
         last_name:
           type: string
           maxLength: 150
-          description: "Фамилия"
-          example: "Пупкин"
+          description: Фамилия
+          example: Пупкин
         is_subscribed:
           type: boolean
           readOnly: true
-          description: "Подписан ли текущий пользователь на этого"
+          description: Подписан ли текущий пользователь на этого
           example: false
       required:
         - username
+
     UserWithRecipes:
-      description: 'Расширенный объект пользователя с рецептами'
+      description: Расширенный объект пользователя с рецептами
       type: object
       properties:
         email:
           type: string
           format: email
           maxLength: 254
-          description: "Адрес электронной почты"
+          description: Адрес электронной почты
         id:
           type: integer
           readOnly: true
         username:
           type: string
-          description: "Уникальный юзернейм"
+          description: Уникальный юзернейм
           pattern: ^[\w.@+-]+\z
           maxLength: 150
         first_name:
           type: string
           maxLength: 150
-          description: "Имя"
-          example: "Вася"
+          description: Имя
+          example: Вася
         last_name:
           type: string
           maxLength: 150
-          description: "Фамилия"
-          example: "Пупкин"
+          description: Фамилия
+          example: Пупкин
         is_subscribed:
           type: boolean
           readOnly: true
-          description: "Подписан ли текущий пользователь на этого"
+          description: Подписан ли текущий пользователь на этого
         recipes:
           type: array
           items:
             $ref: '#/components/schemas/RecipeMinified'
         recipes_count:
           type: integer
-          description: 'Общее количество рецептов пользователя'
+          description: Общее количество рецептов пользователя
 
     Tag:
       type: object
@@ -779,60 +803,61 @@ components:
         name:
           type: string
           maxLength: 200
-          description: 'Название'
-          example: 'Завтрак'
+          description: Название
+          example: Завтрак
         color:
           type: string
           nullable: true
           maxLength: 7
-          description: 'Цвет в HEX'
+          description: Цвет в HEX
           example: '#E26C2D'
         slug:
           type: string
           nullable: true
           maxLength: 200
           pattern: ^[-a-zA-Z0-9_]+$
-          description: 'Уникальный слаг'
-          example: 'breakfast'
+          description: Уникальный слаг
+          example: breakfast
+
     RecipeList:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
-          description: 'Уникальный id'
+          description: Уникальный id
         tags:
-          description: 'Список тегов'
+          description: Список тегов
           type: array
           items:
             $ref: '#/components/schemas/Tag'
         author:
           $ref: '#/components/schemas/User'
         ingredients:
-          description: 'Список ингредиентов'
+          description: Список ингредиентов
           type: array
           items:
             $ref: '#/components/schemas/IngredientInRecipe'
         is_favorited:
           type: boolean
-          description: 'Находится ли в избранном'
+          description: Находится ли в избранном
         is_in_shopping_cart:
           type: boolean
-          description: 'Находится ли в корзине'
+          description: Находится ли в корзине
         name:
           type: string
           maxLength: 200
-          description: 'Название'
+          description: Название
         image:
-          description: 'Ссылка на картинку на сайте'
+          description: Ссылка на картинку на сайте
           example: 'http://foodgram.example.org/media/recipes/images/image.jpeg'
           type: string
           format: url
         text:
-          description: 'Описание'
+          description: Описание
           type: string
         cooking_time:
-          description: 'Время приготовления (в минутах)'
+          description: Время приготовления (в минутах)
           type: integer
           minimum: 1
       required:
@@ -844,26 +869,28 @@ components:
         - image
         - text
         - cooking_time
+
     RecipeMinified:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
-          description: 'Уникальный id'
+          description: Уникальный id
         name:
           type: string
           maxLength: 200
-          description: 'Название'
+          description: Название
         image:
-          description: 'Ссылка на картинку на сайте'
+          description: Ссылка на картинку на сайте
           example: 'http://foodgram.example.org/media/recipes/images/image.jpeg'
           type: string
           format: url
         cooking_time:
-          description: 'Время приготовления (в минутах)'
+          description: Время приготовления (в минутах)
           type: integer
           minimum: 1
+
     Ingredient:
       type: object
       properties:
@@ -873,14 +900,15 @@ components:
         name:
           type: string
           maxLength: 200
-          example: 'Капуста'
+          example: Капуста
         measurement_unit:
           type: string
           maxLength: 200
-          example: 'кг'
+          example: кг
       required:
         - name
         - measurement_unit
+
     IngredientInRecipe:
       type: object
       properties:
@@ -890,21 +918,21 @@ components:
         name:
           type: string
           maxLength: 200
-          description: 'Название'
-          example: 'Картофель отварной'
+          description: Название
+          example: Картофель отварной
         measurement_unit:
           type: string
           maxLength: 200
-          description: 'Единицы измерения'
-          example: 'г'
+          description: Единицы измерения
+          example: г
         amount:
           type: integer
-          description: 'Количество'
+          description: Количество
           minimum: 1
-
       required:
         - name
         - measurement_unit
+
     CustomUserCreate:
       type: object
       properties:
@@ -912,38 +940,39 @@ components:
           type: string
           format: email
           maxLength: 254
-          description: "Адрес электронной почты"
-          example: "vpupkin@yandex.ru"
+          description: Адрес электронной почты
+          example: vpupkin@yandex.ru
         id:
           type: integer
           readOnly: true
         username:
           type: string
-          description: "Уникальный юзернейм"
+          description: Уникальный юзернейм
           pattern: ^[\w.@+-]+\z
           maxLength: 150
-          example: "vasya.pupkin"
+          example: vasya.pupkin
         first_name:
           type: string
           maxLength: 150
-          description: "Имя"
-          example: "Вася"
+          description: Имя
+          example: Вася
         last_name:
           type: string
           maxLength: 150
-          description: "Фамилия"
-          example: "Пупкин"
+          description: Фамилия
+          example: Пупкин
         password:
           type: string
           maxLength: 150
-          description: "Пароль"
-          example: "Qwerty123"
+          description: Пароль
+          example: Qwerty123
       required:
         - username
         - password
         - first_name
         - last_name
         - email
+
     CustomUserResponseOnCreate:
       type: object
       properties:
@@ -951,32 +980,33 @@ components:
           type: string
           format: email
           maxLength: 254
-          description: "Адрес электронной почты"
-          example: "vpupkin@yandex.ru"
+          description: Адрес электронной почты
+          example: vpupkin@yandex.ru
         id:
           type: integer
           readOnly: true
         username:
           type: string
-          description: "Уникальный юзернейм"
+          description: Уникальный юзернейм
           pattern: ^[\w.@+-]+\z
           maxLength: 150
-          example: "vasya.pupkin"
+          example: vasya.pupkin
         first_name:
           type: string
           maxLength: 150
-          description: "Имя"
-          example: "Вася"
+          description: Имя
+          example: Вася
         last_name:
           type: string
           maxLength: 150
-          description: "Фамилия"
-          example: "Пупкин"
+          description: Фамилия
+          example: Пупкин
       required:
         - username
         - first_name
         - last_name
         - email
+
     Activation:
       type: object
       properties:
@@ -987,6 +1017,7 @@ components:
       required:
         - uid
         - token
+
     SendEmailReset:
       type: object
       properties:
@@ -995,6 +1026,7 @@ components:
           format: email
       required:
         - email
+
     PasswordResetConfirm:
       type: object
       properties:
@@ -1008,6 +1040,7 @@ components:
         - uid
         - token
         - new_password
+
     UsernameResetConfirm:
       type: object
       properties:
@@ -1015,6 +1048,7 @@ components:
           type: string
           format: email
           maxLength: 254
+
     SetPassword:
       type: object
       properties:
@@ -1025,6 +1059,7 @@ components:
       required:
         - new_password
         - current_password
+
     SetUsername:
       type: object
       properties:
@@ -1036,6 +1071,7 @@ components:
           maxLength: 254
       required:
         - current_password
+
     TokenCreate:
       type: object
       properties:
@@ -1043,11 +1079,13 @@ components:
           type: string
         email:
           type: string
+
     TokenGetResponse:
       type: object
       properties:
         auth_token:
           type: string
+
     RecipeCreateUpdate:
       type: object
       properties:
@@ -1064,34 +1102,34 @@ components:
             type: object
             properties:
               id:
-                description: 'Уникальный id'
+                description: Уникальный id
                 type: integer
               amount:
-                description: 'Количество в рецепте'
+                description: Количество в рецепте
                 type: integer
             required:
               - id
               - amount
         tags:
-          description: 'Список id тегов'
+          description: Список id тегов
           type: array
           example: [1, 2]
           items:
             type: integer
         image:
-          description: 'Картинка, закодированная в Base64'
+          description: Картинка, закодированная в Base64
           example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg=='
           type: string
           format: binary
         name:
-          description: 'Название'
+          description: Название
           type: string
           maxLength: 200
         text:
-          description: 'Описание'
+          description: Описание
           type: string
         cooking_time:
-          description: 'Время приготовления (в минутах)'
+          description: Время приготовления (в минутах)
           type: integer
           minimum: 1
       required:
@@ -1107,18 +1145,19 @@ components:
       type: object
       properties:
         field_name:
-          description: 'Название поля, в котором произошли ошибки. Таких полей может быть несколько'
-          example: [ 'Обязательное поле.' ]
+          description: Название поля, в котором произошли ошибки. Таких полей может быть несколько
+          example: ['Обязательное поле.']
           type: array
           items:
             type: string
+
     NestedValidationError:
       description: Стандартные ошибки валидации DRF
       type: object
       properties:
         ingredients:
-          description: 'Ошибки в ингредиентах. В приведенном примере в первом и третьем ингредиенте не было ошибок (amount >= 1), а во втором были.'
-          example: [{},{"amount":["Убедитесь, что это значение больше либо равно 1."]}, {}]
+          description: Ошибки в ингредиентах. В приведенном примере в первом и третьем ингредиенте не было ошибок (amount >= 1), а во втором были.
+          example: [{}, {"amount":["Убедитесь, что это значение больше либо равно 1."]}, {}]
           type: array
           items:
             type: object
@@ -1133,7 +1172,7 @@ components:
       type: object
       properties:
         errors:
-          description: 'Описание ошибки'
+          description: Описание ошибки
           type: string
 
     AuthenticationError:
@@ -1141,8 +1180,8 @@ components:
       type: object
       properties:
         detail:
-          description: 'Описание ошибки'
-          example: "Учетные данные не были предоставлены."
+          description: Описание ошибки
+          example: Учетные данные не были предоставлены.
           type: string
 
     PermissionDenied:
@@ -1150,27 +1189,29 @@ components:
       type: object
       properties:
         detail:
-          description: 'Описание ошибки'
-          example: "У вас недостаточно прав для выполнения данного действия."
+          description: Описание ошибки
+          example: У вас недостаточно прав для выполнения данного действия.
           type: string
+
     NotFound:
       description: Объект не найден
       type: object
       properties:
         detail:
-          description: 'Описание ошибки'
-          example: "Страница не найдена."
+          description: Описание ошибки
+          example: Страница не найдена.
           type: string
 
   responses:
     ValidationError:
-      description: 'Ошибки валидации в стандартном формате DRF'
+      description: Ошибки валидации в стандартном формате DRF
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
+
     NestedValidationError:
-      description: 'Ошибки валидации в стандартном формате DRF, в том числе с внутренними элементами.'
+      description: Ошибки валидации в стандартном формате DRF, в том числе с внутренними элементами.
       content:
         application/json:
           schema:
@@ -1199,10 +1240,9 @@ components:
           schema:
             $ref: '#/components/schemas/NotFound'
 
-
   securitySchemes:
     Token:
-      description: 'Авторизация по токену. <br>
-      Все запросы от имени пользователя должны выполняться с заголовком "Authorization: Token TOKENVALUE"'
+      description: Авторизация по токену.
       type: http
       scheme: token
+
