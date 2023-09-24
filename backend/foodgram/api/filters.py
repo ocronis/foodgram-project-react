@@ -3,8 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.filters import SearchFilter
 
 from recipes.models import Recipe
-
-User = get_user_model()
+from users.models import User
 
 
 class IngredientFilter(SearchFilter):

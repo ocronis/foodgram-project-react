@@ -1,20 +1,15 @@
 import os
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 load_dotenv()
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', '*')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,7 +18,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
@@ -64,17 +58,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
-#         'NAME': os.getenv('DB_NAME', 'postgres'),
-#         'USER': os.getenv('POSTGRES_USER', 'postgres'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-#         'HOST': os.getenv('DB_HOST', 'db'),
-#         'PORT': os.getenv('DB_PORT', '5432'),
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -99,7 +82,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 

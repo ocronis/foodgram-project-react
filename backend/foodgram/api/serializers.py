@@ -7,23 +7,21 @@ from rest_framework.exceptions import ValidationError
 
 from recipes.models import (Favorite, Ingredient, RecipeIngredient, Recipe,
                             ShoppingCart, Tag)
-
-User = get_user_model()
+from users.models import User
 
 
 class TagsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = '__all__'
-        read_only_fields = ('name', 'color', 'slug',)
+        fields = ('id', 'name', 'color', 'slug',)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = '__all__'
+        fields = ('id', 'name', 'measurement_unit',)
 
 
 class RecipeIngredientWriteSerializer(serializers.Serializer):
@@ -31,9 +29,9 @@ class RecipeIngredientWriteSerializer(serializers.Serializer):
     amount = serializers.IntegerField(write_only=True)
 
     def validate_amount(self, value):
-        if value < 1:
+        if value <= 0:
             raise serializers.ValidationError(
-                'Пожалуйста, убедитесь, что количество ингредиента больше 1.'
+                "Количество ингредиента должно быть больше нуля."
             )
         return value
 
@@ -44,8 +42,8 @@ class RecipeIngredientReadSerializer(serializers.ModelSerializer):
     measurement_unit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        fields = ('id', 'name', 'amount', 'measurement_unit')
         model = RecipeIngredient
+        fields = ('id', 'name', 'amount', 'measurement_unit',)
 
     def get_name(self, obj):
         return obj.ingredient.name
@@ -113,7 +111,7 @@ class RecipesWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'author', 'name', 'image', 'text',
-                  'ingredients', 'cooking_time')
+                  'ingredients', 'cooking_time',)
 
     def to_representation(self, instance):
         serializer = RecipesReadSerializer(instance, context=self.context)
@@ -130,26 +128,40 @@ class RecipesWriteSerializer(serializers.ModelSerializer):
             ) for ingr in ingredients
         ])
 
-    def validate_ingredients(self, data):
-        ingredients = self.initial_data.get('ingredients')
-        if not ingredients:
-            raise ValidationError('Пожалуйста, укажите хотя бы 1 ингредиент.')
-        unique_ingredients = []
-        for ingredient in ingredients:
-            ingr_id = ingredient['id']
-            if ingr_id not in unique_ingredients:
-                unique_ingredients.append(ingr_id)
-            else:
-                raise ValidationError(
-                    'Пожалуйста, удалите дублирующиеся ингредиенты.'
-                )
-        return data
+    def validate_tags(self, value):
+        if not value:
+            raise serializers.ValidationError("Выберите хотя бы один тег.")
+        if len(set(value)) != len(value):
+            raise serializers.ValidationError("Теги должны быть уникальными.")
+        return value
 
-    def validate_cooking_time(self, data):
-        cooking_time = self.initial_data.get('cooking_time')
-        if int(cooking_time) < 1:
-            raise ValidationError('Время приготовления должно быть больше 0.')
-        return data
+    def validate_ingredients(self, value):
+        if not value:
+            raise serializers.ValidationError(
+                 "Выберите хотя бы один ингредиент."
+            )
+        
+        ingredient_ids = [item['id'] for item in value]
+        if len(set(ingredient_ids)) != len(ingredient_ids):
+            raise serializers.ValidationError(
+                 "Ингредиенты должны быть уникальными."
+            )
+        
+        return value
+
+    def validate_cooking_time(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                 "Время приготовления должно быть больше нуля."
+            )
+        return value
+
+    def validate_name(self, value):
+        if not any(char.isalpha() for char in value):
+            raise serializers.ValidationError(
+                 "Название рецепта должно содержать буквы."
+            )
+        return value
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
@@ -186,7 +198,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
+        fields = ('id', 'name', 'image', 'cooking_time',)
 
 
 class FollowRecipeSerializer(serializers.ModelSerializer):

@@ -2,13 +2,11 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
-from django.db.models import CheckConstraint, UniqueConstraint
 
 from users.validators import UserNameValidator, check_username
 
 
 class User(AbstractUser):
-    """Пользовательская модель пользователя."""
     email = models.EmailField(
         max_length=settings.MAX_LENGTH_EMAIL,
         unique=True,
@@ -43,14 +41,13 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        ordering = ('id',)
+        ordering = ('username', 'email', 'first_name', 'last_name')
 
     def __str__(self):
         return self.username
 
 
 class Follow(models.Model):
-    """Подписка на автора рецептурной модели."""
     user = models.ForeignKey(
         User,
         related_name='follower',
@@ -65,16 +62,16 @@ class Follow(models.Model):
     )
 
     class Meta:
-        ordering = ('id',)
-        constraints = [
-            UniqueConstraint(
-                fields=['user', 'author'],
-                name='Ограничение повторной подписки'
-            ),
-            CheckConstraint(
-                name="Ограничение на самоподписку",
-                check=~models.Q(user=models.F('author')),
-            ),
+        ordering = ('user__username', 'author__username')
+        constraints = [ 
+            UniqueConstraint( 
+                fields=['user', 'author'], 
+                name='Ограничение повторной подписки' 
+            ), 
+            CheckConstraint( 
+                name="Ограничение на самоподписку", 
+                check=~models.Q(user=models.F('author')), 
+            ), 
         ]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
