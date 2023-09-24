@@ -237,7 +237,7 @@ class FollowSerializer(serializers.ModelSerializer):
                 queryset = queryset[:int(limit)]
             except ValueError:
                 raise ValueError(
-                	'Неверно указан параметр для ограничения рецептов.'
+                         'Неверно указан параметр для ограничения рецептов.'
                 )
         return FollowRecipeSerializer(queryset, many=True).data
 
