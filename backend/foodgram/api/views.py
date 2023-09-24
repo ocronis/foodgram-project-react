@@ -47,7 +47,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             return queryset.filter(pk__in=favorite_recipes_ids)
 
         if self.request.GET.get('is_in_shopping_cart'):
-            cart_recipes_ids = ShoppingCart.objects
+            cart_recipes_ids = ShoppingCart.objects \
             	.filter(user=author).values('recipe_id')
             return queryset.filter(pk__in=cart_recipes_ids)
         return queryset
@@ -108,10 +108,12 @@ class RecipesViewSet(viewsets.ModelViewSet):
         )
         return response
 
+
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagsSerializer
     pagination_class = None
+
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
@@ -120,6 +122,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [IngredientFilter]
     search_fields = ['^name']
     pagination_class = None
+
 
 class FollowUserView(APIView):
     permission_classes = [IsAuthenticated]
