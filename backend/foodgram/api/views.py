@@ -42,11 +42,13 @@ class RecipesViewSet(viewsets.ModelViewSet):
         queryset = Recipe.objects.all()
         author = self.request.user
         if self.request.GET.get('is_favorited'):
-            favorite_recipes_ids = Favorite.objects.filter(user=author).values('recipe_id')
+            favorite_recipes_ids = Favorite.objects
+            	.filter(user=author).values('recipe_id')
             return queryset.filter(pk__in=favorite_recipes_ids)
 
         if self.request.GET.get('is_in_shopping_cart'):
-            cart_recipes_ids = ShoppingCart.objects.filter(user=author).values('recipe_id')
+            cart_recipes_ids = ShoppingCart.objects
+            	.filter(user=author).values('recipe_id')
             return queryset.filter(pk__in=cart_recipes_ids)
         return queryset
 
@@ -65,21 +67,25 @@ class RecipesViewSet(viewsets.ModelViewSet):
             obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         error_message = f'Рецепт не добавлен в {model.__name__}'
-        return Response({'errors': error_message}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'errors': error_message},
+        		status=status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['post', 'delete'], detail=True, permission_classes=[IsAuthenticated])
+    @action(methods=['post', 'delete'], detail=True,
+    	    permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
         if request.method == 'POST':
             return self.add_in_list(Favorite, request.user, pk)
         return self.delete_in_list(Favorite, request.user, pk)
 
-    @action(methods=['post', 'delete'], detail=True, permission_classes=[IsAuthenticated])
+    @action(methods=['post', 'delete'], detail=True,
+    	    permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk=None):
         if request.method == 'POST':
             return self.add_in_list(ShoppingCart, request.user, pk)
         return self.delete_in_list(ShoppingCart, request.user, pk)
 
-    @action(methods=['GET'], detail=False, permission_classes=[IsAuthenticated])
+    @action(methods=['GET'], detail=False,
+    	    permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
         ingredients = request.user.shopping_cart.values(
             'recipe__ingredients_amount__ingredient__name',
@@ -122,9 +128,11 @@ class FollowUserView(APIView):
         author = get_object_or_404(User, id=id)
         if request.user.follower.filter(author=author).exists():
             error_message = "Вы уже подписаны на автора"
-            return Response({"errors": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"errors": error_message},
+            		    status=status.HTTP_400_BAD_REQUEST)
         follow_instance = request.user.follower.create(author=author)
-        serializer = FollowSerializer(follow_instance, context={"request": request})
+        serializer = FollowSerializer(follow_instance,
+        			      context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, id):
@@ -133,7 +141,9 @@ class FollowUserView(APIView):
             request.user.follower.filter(author=author).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         error_message = "Автор отсутствует в списке подписок"
-        return Response({"errors": error_message}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"errors": error_message},
+        		status=status.HTTP_400_BAD_REQUEST)
+
 
 class SubscriptionsView(ListAPIView):
     serializer_class = FollowSerializer
@@ -142,4 +152,3 @@ class SubscriptionsView(ListAPIView):
 
     def get_queryset(self):
         return self.request.user.follower.all()
-
