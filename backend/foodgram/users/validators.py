@@ -9,6 +9,6 @@ def check_username(value):
 
 class UserNameValidator(RegexValidator):
     regex = r'^[а-яА-ЯёЁa-zA-Z -]+$'
-    message = 'Введите правильное имя. Оно должно включать только буквы, пробел и дефис.'
+    message = ('Введите правильное имя. Оно должно включать только буквы, '
+               'пробел и дефис.')
     flags = 0
-

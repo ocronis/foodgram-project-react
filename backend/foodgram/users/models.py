@@ -6,6 +6,7 @@ from django.db.models import CheckConstraint, UniqueConstraint
 
 from users.validators import UserNameValidator, check_username
 
+
 class User(AbstractUser):
     """Пользовательская модель пользователя."""
     email = models.EmailField(
@@ -47,6 +48,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+
 class Follow(models.Model):
     """Подписка на автора рецептурной модели."""
     user = models.ForeignKey(
@@ -76,4 +78,3 @@ class Follow(models.Model):
         ]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
-
