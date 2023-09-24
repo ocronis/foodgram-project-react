@@ -236,9 +236,10 @@ class FollowSerializer(serializers.ModelSerializer):
             try:
                 queryset = queryset[:int(limit)]
             except ValueError:
-                raise ValueError('Неверно указан параметр для ограничения рецептов.')
+                raise ValueError(
+                	'Неверно указан параметр для ограничения рецептов.'
+                )
         return FollowRecipeSerializer(queryset, many=True).data
 
     def get_recipes_count(self, obj):
         return obj.author.recipe.all().count()
-

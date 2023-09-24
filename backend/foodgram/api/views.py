@@ -43,11 +43,13 @@ class RecipesViewSet(viewsets.ModelViewSet):
         queryset = Recipe.objects.all()
         author = self.request.user
         if self.request.GET.get('is_favorited'):
-            favorite_recipes_ids = Favorite.objects.filter(user=author).values('recipe_id')
+            favorite_recipes_ids = Favorite.objects.filter(user=author) \
+                                      .values('recipe_id')
             return queryset.filter(pk__in=favorite_recipes_ids)
 
         if self.request.GET.get('is_in_shopping_cart'):
-            cart_recipes_ids = ShoppingCart.objects.filter(user=author).values('recipe_id')
+            cart_recipes_ids = ShoppingCart.objects.filter(user=author) \
+            				.values('recipe_id')
             return queryset.filter(pk__in=cart_recipes_ids)
         return queryset
 
@@ -159,4 +161,3 @@ class SubscriptionsView(ListAPIView):
 
     def get_queryset(self):
         return self.request.user.follower.all()
-

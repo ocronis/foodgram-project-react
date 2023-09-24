@@ -4,7 +4,6 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
-# Создаем объект schema_view для генерации документации API.
 schema_view = get_schema_view(
     openapi.Info(
         title='Yamdb API',
@@ -18,8 +17,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('api/', include('api.urls')),  # Подключаем URL-пути для API.
-    path('admin/', admin.site.urls),    # Подключаем URL-путь для административной панели Django.
-    path('docs/', schema_view.with_ui("swagger")),  # Подключаем URL-путь для документации Swagger.
+    path('api/', include('api.urls')),
+    path('admin/', admin.site.urls),
+    path('docs/', schema_view.with_ui("swagger")),
 ]
 

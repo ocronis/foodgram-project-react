@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 from recipes.models import Ingredient
 
+
 class Command(BaseCommand):
     help = 'Импорт ингредиентов из JSON файла.'
 
@@ -32,4 +33,3 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(
                 'Ошибка импорта ингредиентов: {}'.format(str(e)))
             )
-
