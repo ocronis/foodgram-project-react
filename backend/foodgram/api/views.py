@@ -94,7 +94,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
         ).annotate(amount=Sum('recipe__ingredients_amount__amount'))
         shopping_list = 'Список покупок:\n'
         count_ingredients = 0
-        unit = ingr["recipe__ingredients_amount__ingredient"]["measurement_unit"]
+        unit = 'ingr["recipe__ingredients_amount__ingredient"]' \
+               '["measurement_unit"]'
         for ingr in ingredients:
             count_ingredients += 1
             shopping_list += (
