@@ -22,7 +22,11 @@ from api.serializers import (
     RecipesWriteSerializer,
     TagsSerializer,
 )
-from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
+from recipes.models import (Favorite,
+			    Ingredient,
+			    Recipe,
+			    ShoppingCart,
+			    Tag)
 
 User = get_user_model()
 
@@ -43,11 +47,13 @@ class RecipesViewSet(viewsets.ModelViewSet):
         queryset = Recipe.objects.all()
         author = self.request.user
         if self.request.GET.get('is_favorited'):
-            favorite_recipes_ids = Favorite.objects.filter(user=author).values('recipe_id')
+            favorite_recipes_ids = Favorite.objects \
+            			   .filter(user=author).values('recipe_id')
             return queryset.filter(pk__in=favorite_recipes_ids)
 
         if self.request.GET.get('is_in_shopping_cart'):
-            cart_recipes_ids = ShoppingCart.objects.filter(user=author).values('recipe_id')
+            cart_recipes_ids = ShoppingCart.objects \
+            		       .filter(user=author).values('recipe_id')
             return queryset.filter(pk__in=cart_recipes_ids)
         return queryset
 
@@ -68,19 +74,22 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return Response({'errors': f'Рецепт не добавлен в {model.__name__}'},
                         status=status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['post', 'delete'], detail=True, permission_classes=[IsAuthenticated])
+    @action(methods=['post', 'delete'], detail=True,
+    	    permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
         if request.method == 'POST':
             return self.add_in_list(Favorite, request.user, pk)
         return self.delete_in_list(Favorite, request.user, pk)
 
-    @action(methods=['post', 'delete'], detail=True, permission_classes=[IsAuthenticated])
+    @action(methods=['post', 'delete'],
+    	    detail=True, permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk=None):
         if request.method == 'POST':
             return self.add_in_list(ShoppingCart, request.user, pk)
         return self.delete_in_list(ShoppingCart, request.user, pk)
 
-    @action(methods=['GET'], detail=False, permission_classes=[IsAuthenticated])
+    @action(methods=['GET'], detail=False,
+    	    permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
         ingredients = request.user.shopping_cart.values(
             'recipe__ingredients_amount__ingredient__name',
@@ -94,7 +103,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 f'{count_ingredients}) '
                 f'{ingr["recipe__ingredients_amount__ingredient__name"]} - '
                 f'{ingr["amount"]} '
-                f'({ingr["recipe__ingredients_amount__ingredient__measurement_unit"]})\n'
+                f'({ingr["recipe__ingredients_amount' \
+                 '__ingredient__measurement_unit"]})\n'
             )
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = (
@@ -155,4 +165,3 @@ class SubscriptionsView(ListAPIView):
 
     def get_queryset(self):
         return self.request.user.follower.all()
-
