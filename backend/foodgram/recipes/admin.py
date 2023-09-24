@@ -1,10 +1,12 @@
 from django.contrib import admin
-from recipes.models import (Favorite,
-                           Ingredient,
-                           RecipeIngredient,
-                           Recipe,
-                           ShoppingCart,
-                           Tag)
+from recipes.models import (
+    Favorite,
+    Ingredient,
+    RecipeIngredient,
+    Recipe,
+    ShoppingCart,
+    Tag,
+)
 
 
 class RecipeIngredientInline(admin.StackedInline):
@@ -21,6 +23,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
     def favorite_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
+
     favorite_count.short_description = 'Количество избранного'
 
 

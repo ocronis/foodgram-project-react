@@ -21,4 +21,3 @@ urlpatterns = [
     path('', include(router.urls)),
     path('users/<int:id>/subscribe/', FollowUserView.as_view()),
 ]
-
