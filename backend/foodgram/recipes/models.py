@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator,
-                                   MaxValueValidator,
-                                   validate_slug
+from django.core.validators import (MinValueValidator,
+                                    MaxValueValidator,
+                                    validate_slug)
 from django.db import models
 
 from recipes.validators import ColorValidator

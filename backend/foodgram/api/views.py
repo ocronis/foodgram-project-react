@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
@@ -21,6 +22,18 @@ from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from users.models import User
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
+
+from .utils import (
+    get_recipe_queryset,
+    add_recipe_to_list,
+    remove_recipe_from_list,
+    download_shopping_cart,
+    get_tags_queryset,
+    get_ingredients_queryset,
+    follow_user,
+    unfollow_user,
+    get_subscriptions_queryset,
+)
 
 
 class RecipesViewSet(viewsets.ModelViewSet):

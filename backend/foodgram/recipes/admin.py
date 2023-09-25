@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.db.models import Count
-from django.db.models.functions import Concat
 from django.db.models import Value
 
 from recipes.models import (
