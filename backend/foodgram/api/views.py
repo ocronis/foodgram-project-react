@@ -16,7 +16,7 @@ from .serializers import (
     RecipesWriteSerializer,
     TagsSerializer,
 )
-from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
+from recipes.models import Favorite, Recipe, ShoppingCart
 
 from .utils import (
     get_recipe_queryset,

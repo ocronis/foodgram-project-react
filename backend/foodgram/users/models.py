@@ -64,11 +64,11 @@ class Follow(models.Model):
     class Meta:
         ordering = ('user__username', 'author__username')
         constraints = [
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=['user', 'author'],
                 name='Ограничение повторной подписки'
             ),
-            CheckConstraint(
+            models.CheckConstraint(
                 name="Ограничение на самоподписку",
                 check=~models.Q(user=models.F('author')),
             ),

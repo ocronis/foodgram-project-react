@@ -28,12 +28,18 @@ def get_recipe_queryset(request):
     queryset = Recipe.objects.all()
     author = request.user
     if request.GET.get('is_favorited'):
-        favorite_recipes_ids = Favorite.objects
-             .filter(user=author).values('recipe_id')
+        favorite_recipes_ids = (
+             Favorite.objects
+             .filter(user=author)
+             .values('recipe_id')
+        )
         return queryset.filter(pk__in=favorite_recipes_ids)
     if request.GET.get('is_in_shopping_cart'):
-        cart_recipes_ids = ShoppingCart.objects
-             .filter(user=author).values('recipe_id')
+        cart_recipes_ids = (
+             ShoppingCart.objects
+             .filter(user=author)
+             .values('recipe_id')
+        )
         return queryset.filter(pk__in=cart_recipes_ids)
     return queryset
 
