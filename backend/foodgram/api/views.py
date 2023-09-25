@@ -1,30 +1,26 @@
-from django.db.models import Sum 
-from django.http import HttpResponse 
-from django.shortcuts import get_object_or_404 
-from django_filters.rest_framework import DjangoFilterBackend 
-from rest_framework import status, viewsets 
-from rest_framework.decorators import action 
-from rest_framework.generics import ListAPIView 
-from rest_framework.pagination import LimitOffsetPagination 
-from rest_framework.permissions import IsAuthenticated 
-from rest_framework.response import Response 
-from rest_framework.views import APIView 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .utils import download_shopping_cart
-from api.filters import IngredientFilter, RecipeFilter 
-from api.paginators import CustomPagination 
-from api.permissions import IsAuthorOrReadOnly 
-from api.serializers import ( 
-    FavoriteSerializer, 
-    FollowSerializer, 
-    IngredientSerializer, 
-    RecipeListSerializer, 
-    RecipesWriteSerializer, 
-    TagsSerializer, 
+from api.filters import IngredientFilter, RecipeFilter
+from api.paginators import CustomPagination
+from api.permissions import IsAuthorOrReadOnly
+from api.serializers import (
+    FavoriteSerializer,
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeListSerializer,
+    RecipesWriteSerializer,
+    TagsSerializer,
 )
 from recipes.models import (Favorite, Ingredient, Recipe,
                             ShoppingCart, Tag, User)
-
 
 
 class RecipesViewSet(viewsets.ModelViewSet):

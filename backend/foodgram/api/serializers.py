@@ -159,7 +159,6 @@ class RecipesWriteSerializer(serializers.ModelSerializer):
                                               " содержать только буквы.")
         return value
 
-
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
         tags = self.initial_data.get('tags')
