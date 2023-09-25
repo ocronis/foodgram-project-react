@@ -12,9 +12,11 @@ from recipes.models import (
     Tag,
 )
 
+
 class RecipeIngredientInline(admin.StackedInline):
     model = RecipeIngredient
     min_num = 1
+
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
@@ -34,19 +36,23 @@ class RecipeAdmin(admin.ModelAdmin):
     def favorite_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
 
+
 @admin.register(Ingredient)
 class IngredientsAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
     list_filter = ('name',)
     search_fields = ('name',)
 
+
 @admin.register(Tag)
 class TagsAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug')
 
+
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
+
 
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
