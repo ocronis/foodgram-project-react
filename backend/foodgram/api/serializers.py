@@ -1,10 +1,12 @@
+import re
+
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from recipes.models import (Favorite, Ingredient, RecipeIngredient, Recipe,
-                            ShoppingCart, Tag)
+from recipes.models import (Favorite, Ingredient, RecipeIngredient,
+                            Recipe, ShoppingCart, Tag)
 from users.models import User
 
 
@@ -152,10 +154,11 @@ class RecipesWriteSerializer(serializers.ModelSerializer):
         return value
 
     def validate_name(self, value):
-        if not any(char.isalpha() for char in value):
-            raise serializers.ValidationError("Название рецепта "
-                                              "должно содержать буквы.")
+        if not re.match(r'^[a-zA-Zа-яА-Я\s]+$', value):
+            raise serializers.ValidationError("Название рецепта должно"
+                                              " содержать только буквы.")
         return value
+
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')

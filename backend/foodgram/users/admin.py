@@ -1,7 +1,7 @@
+from .models import Follow
 from django.contrib import admin
 from django.contrib.auth import models as auth_models
 from users.models import User
-from .models import Follow
 
 
 @admin.register(User)
