@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.db.models import Value
 
 from recipes.models import (
     Favorite,
@@ -25,9 +24,8 @@ class RecipeAdmin(admin.ModelAdmin):
     prepopulated_fields = {"tags": ("name",)}
 
     def ingredients_list(self, obj):
-        ingredients = obj.ingredients_amount.values_list(
-             'ingredient__name', flat=True
-        )
+        ingredients = obj.ingredients_amount.values_list('ingredient__name',
+                                                         flat=True)
         return ', '.join(ingredients)
 
     @admin.display(description='Количество избранного')
