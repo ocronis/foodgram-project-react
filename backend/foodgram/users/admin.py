@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth import models as auth_models
 from users.models import User
 from .models import Follow
 
@@ -23,4 +24,4 @@ class FollowAdmin(admin.ModelAdmin):
     list_display = ('user', 'author')
 
 
-admin.site.unregister(models.Group)
+admin.site.unregister(auth_models.Group)

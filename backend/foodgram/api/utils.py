@@ -2,16 +2,9 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import (
-    FavoriteSerializer,
-    IngredientSerializer,
-    RecipeListSerializer,
-    RecipesWriteSerializer,
-    TagsSerializer,
-)
-from django_filters.rest_framework import DjangoFilterBackend
+from .serializers import FollowSerializer
 from .models import (Recipe, Favorite, ShoppingCart,
-                     Tag, Ingredient, User, Follow)
+                     Tag, Ingredient, User)
 
 
 def get_recipe_queryset(request):
@@ -19,16 +12,16 @@ def get_recipe_queryset(request):
     author = request.user
     if request.GET.get('is_favorited'):
         favorite_recipes_ids = (
-             Favorite.objects
-             .filter(user=author)
-             .values('recipe_id')
+                                Favorite.objects
+                                .filter(user=author)
+                                .values('recipe_id')
         )
         return queryset.filter(pk__in=favorite_recipes_ids)
     if request.GET.get('is_in_shopping_cart'):
         cart_recipes_ids = (
-             ShoppingCart.objects
-             .filter(user=author)
-             .values('recipe_id')
+                            ShoppingCart.objects
+                            .filter(user=author)
+                            .values('recipe_id')
         )
         return queryset.filter(pk__in=cart_recipes_ids)
     return queryset

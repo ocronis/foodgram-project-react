@@ -73,12 +73,12 @@ class Recipe(models.Model):
     cooking_time = models.PositiveSmallIntegerField(
         validators=[
             MinValueValidator(
-                 1, message=('Время приготовления не может '
-                             'быть меньше 1 минуты!')
+                              1, message=('Время приготовления не может '
+                                          'быть меньше 1 минуты!')
             ),
             MaxValueValidator(
-                 240, message=('Время приготовления не '
-                               'может превышать 4 часа!')
+                              240, message=('Время приготовления не '
+                                            'может превышать 4 часа!')
             ),
         ],
         default=1,
