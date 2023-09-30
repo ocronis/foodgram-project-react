@@ -21,7 +21,6 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('name', 'author', 'tags')
     readonly_fields = ('favorite_count',)
     inlines = [RecipeIngredientInline]
-    prepopulated_fields = {"tags": ("name",)}
 
     def ingredients_list(self, obj):
         ingredients = obj.ingredients_amount.values_list('ingredient__name',
@@ -31,6 +30,8 @@ class RecipeAdmin(admin.ModelAdmin):
     @admin.display(description='Количество избранного')
     def favorite_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
+
+    autocomplete_fields = ['tags']
 
 
 @admin.register(Ingredient)
@@ -43,6 +44,7 @@ class IngredientsAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagsAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug')
+    search_fields = ('name', 'slug')
 
 
 @admin.register(Favorite)

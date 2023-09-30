@@ -90,6 +90,14 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
 
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    quantity = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return f"{self.ingredient.name} - {self.quantity} {self.ingredient.measurement_unit}"
+
 class BaseFavorite(models.Model):
     user = models.ForeignKey(
         User,
