@@ -5,7 +5,7 @@ from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from recipes.models import (Favorite, Ingredient,
+from recipes.models import (Favorite, Ingredient, RecipeIngredient,
                             Recipe, ShoppingCart, Tag)
 from users.models import User
 
@@ -42,7 +42,7 @@ class RecipeIngredientReadSerializer(serializers.ModelSerializer):
     measurement_unit = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        model = Ingredient
+        model = RecipeIngredient
         fields = ('id', 'name', 'amount', 'measurement_unit',)
 
     def get_name(self, obj):
@@ -118,8 +118,8 @@ class RecipesWriteSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def add_ingredients(self, recipe, ingredients):
-        Ingredient.objects.bulk_create([
-            Ingredient(
+        RecipeIngredient.objects.bulk_create([
+            RecipeIngredient(
                 recipe=recipe,
                 ingredient=get_object_or_404(
                     Ingredient,

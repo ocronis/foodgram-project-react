@@ -3,7 +3,7 @@ from django.contrib import admin
 from recipes.models import (
     Favorite,
     Ingredient,
-    Ingredient,
+    RecipeIngredient,
     Recipe,
     ShoppingCart,
     Tag,
@@ -11,7 +11,7 @@ from recipes.models import (
 
 
 class RecipeIngredientInline(admin.StackedInline):
-    model = Ingredient
+    model = RecipeIngredient
     min_num = 1
 
 
