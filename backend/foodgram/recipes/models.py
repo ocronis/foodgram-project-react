@@ -90,14 +90,6 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
 
-class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    quantity = models.FloatField(default=0.0)
-
-    def __str__(self):
-        return f"{self.ingredient.name} - {self.quantity} {self.ingredient.measurement_unit}"
-
 class BaseFavorite(models.Model):
     user = models.ForeignKey(
         User,
@@ -132,3 +124,12 @@ class ShoppingCart(BaseFavorite):
             models.UniqueConstraint(fields=('user', 'recipe'),
                                     name='unique_shopping_cart',),
         ]
+
+
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='recipe_ingredients')
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='recipe_ingredients')
+    quantity = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.recipe.name} - {self.ingredient.name} ({self.quantity})"

@@ -31,8 +31,6 @@ class RecipeAdmin(admin.ModelAdmin):
     def favorite_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
 
-    autocomplete_fields = ['tags']
-
 
 @admin.register(Ingredient)
 class IngredientsAdmin(admin.ModelAdmin):
@@ -44,7 +42,6 @@ class IngredientsAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagsAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug')
-    search_fields = ('name', 'slug')
 
 
 @admin.register(Favorite)

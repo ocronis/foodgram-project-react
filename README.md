@@ -270,11 +270,11 @@ docker build -t ocronis/foodgram_frontend . # Собрали образ foodgram
 docker build -t ocronis/foodgram_backend . # Собрали образ foodgram_backend
 docker push ocronis/foodgram_frontend # Запушили DockerHub
 docker push ocronis/foodgram_backend # Запушили DockerHub
-ssh ser@51.250.26.194 # Заходим на ВМ
+ssh ser@158.160.2.78 # Заходим на ВМ
 Enter passphrase for key: # если Вы его установили
-scp docker-compose.yml ser@51.250.26.194:/home/ser/docker-compose.yml
-scp nginx.conf ser@51.250.26.194:/home/ser/nginx.conf
-scp -r infra ser@51.250.26.194:/home/ser/infra # Копируем infra/ на сервер
+scp docker-compose.yml ser@158.160.2.78:/home/ser/docker-compose.yml
+scp nginx.conf ser@158.160.2.78:/home/ser/nginx.conf
+scp -r infra ser@158.160.2.78:/home/ser/infra # Копируем infra/ на сервер
 sudo docker-compose up -d --build # создаём контейнеры
 sudo docker-compose stop # останавливаем контейнеры
 sudo docker-compose start # стартуем контейнеры
@@ -325,12 +325,12 @@ USER
 ```
 
 ### **Адрес сайта на Яндекс.Облаке:**
-http://51.250.26.194/signin Вход на сайт и регистрация <br>
-http://51.250.26.194/recipes Главная страница рецептов <br>
-http://51.250.26.194/subscriptions Подписки <br>
-http://51.250.26.194/recipes/create Создание рецепта <br>
-http://51.250.26.194/favorites Избранное <br>
-http://51.250.26.194/cart Список покупок <br>
+http://158.160.2.78/signin Вход на сайт и регистрация <br>
+http://158.160.2.78/recipes Главная страница рецептов <br>
+http://158.160.2.78/subscriptions Подписки <br>
+http://158.160.2.78/recipes/create Создание рецепта <br>
+http://158.160.2.78/favorites Избранное <br>
+http://158.160.2.78/cart Список покупок <br>
 ---
 
 ### **Данные для входа в админку:**
