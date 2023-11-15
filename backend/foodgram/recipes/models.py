@@ -127,8 +127,16 @@ class ShoppingCart(BaseFavorite):
 
 
 class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='recipe_ingredients')
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='recipe_ingredients')
+    recipe = models.ForeignKey(
+        Recipe, 
+        on_delete=models.CASCADE, 
+        related_name='recipe_ingredients'
+    )
+    ingredient = models.ForeignKey(
+        Ingredient, 
+        on_delete=models.CASCADE, 
+        related_name='recipe_ingredients'
+    )
     quantity = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
